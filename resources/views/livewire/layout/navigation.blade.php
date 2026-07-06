@@ -28,6 +28,7 @@ new class extends Component
         : auth()->user();
     $userTitle = $isCaregiver ? 'Caregiver' : 'Doctor';
     $userPrefix = $isCaregiver ? '' : 'Dr. ';
+    $userInitial = strtoupper(substr($user->name ?? 'U', 0, 1));
 @endphp
 
 <div>
@@ -143,7 +144,9 @@ new class extends Component
                             @if($user && $user->profile_image)
                                 <img src="{{ asset('storage/' . $user->profile_image) }}" alt="user-image" class="img-fluid user-avtar me-0 rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
                             @else
-                                <img src="{{ asset('assets/images/avatar/1.png') }}" alt="user-image" class="img-fluid user-avtar me-0" />
+                                <div class="d-flex align-items-center justify-content-center rounded-circle me-0" style="width: 40px; height: 40px; background: linear-gradient(135deg, {{ $isCaregiver ? '#7c3aed, #ec4899' : '#2563eb, #7c3aed' }}); color: white; font-weight: bold; font-size: 16px;">
+                                    {{ $userInitial }}
+                                </div>
                             @endif
                         </a>
                         <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-user-dropdown">
@@ -152,7 +155,9 @@ new class extends Component
                                     @if($user && $user->profile_image)
                                         <img src="{{ asset('storage/' . $user->profile_image) }}" alt="user-image" class="img-fluid user-avtar rounded-circle" style="width: 50px; height: 50px; object-fit: cover;" />
                                     @else
-                                        <img src="{{ asset('assets/images/avatar/1.png') }}" alt="user-image" class="img-fluid user-avtar" />
+                                        <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 50px; height: 50px; background: linear-gradient(135deg, {{ $isCaregiver ? '#7c3aed, #ec4899' : '#2563eb, #7c3aed' }}); color: white; font-weight: bold; font-size: 20px;">
+                                            {{ $userInitial }}
+                                        </div>
                                     @endif
                                     <div>
                                         <h6 class="text-dark mb-0">{{ $userPrefix }}{{ $user->name ?? 'User' }} <span class="badge bg-soft-{{ $isCaregiver ? 'info' : 'success' }} text-{{ $isCaregiver ? 'info' : 'success' }} ms-1">{{ $userTitle }}</span></h6>

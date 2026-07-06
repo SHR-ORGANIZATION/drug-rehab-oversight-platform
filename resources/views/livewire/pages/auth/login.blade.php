@@ -19,8 +19,14 @@ new #[Layout('layouts.guest')] class extends Component
     {
         $this->validate();
 
+        // Logout any existing caregiver session first
+        if (Auth::guard('caregiver')->check()) {
+            Auth::guard('caregiver')->logout();
+        }
+
         $this->form->authenticate();
 
+        Session::invalidate();
         Session::regenerate();
 
         // Check if the authenticated user has the doctor role

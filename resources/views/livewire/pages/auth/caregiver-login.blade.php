@@ -19,6 +19,11 @@ new #[Layout('layouts.guest')] class extends Component
     {
         $this->validate();
 
+        // Logout any existing doctor (web guard) session first
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+        }
+
         // Authenticate using the caregiver guard
         $credentials = $this->form->only(['email', 'password']);
         $remember = $this->form->remember;
@@ -28,6 +33,7 @@ new #[Layout('layouts.guest')] class extends Component
             return;
         }
 
+        Session::invalidate();
         Session::regenerate();
 
         $this->redirect(route('caregiver.dashboard', absolute: false), navigate: false);

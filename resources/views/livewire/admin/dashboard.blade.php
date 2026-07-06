@@ -58,12 +58,18 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="fs-12 fw-medium text-muted">Registered patients in the system</span>
                                 <div class="w-100 text-end">
-                                    <span class="fs-12 text-dark">+12%</span>
+                                    @if($stats['patientsGrowth']['percentage'] > 0)
+                                    <span class="fs-12 text-success">+{{ $stats['patientsGrowth']['percentage'] }}%</span>
+                                    @elseif($stats['patientsGrowth']['percentage'] < 0)
+                                    <span class="fs-12 text-danger">{{ $stats['patientsGrowth']['percentage'] }}%</span>
+                                    @else
+                                    <span class="fs-12 text-muted">0%</span>
+                                    @endif
                                     <span class="fs-11 text-muted">from last month</span>
                                 </div>
                             </div>
                             <div class="progress mt-2 ht-3">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"></div>
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $stats['totalPatients'] > 0 ? min(round(($stats['patientsGrowth']['current'] / max($stats['totalPatients'], 1)) * 100), 100) : 0 }}%"></div>
                             </div>
                         </div>
                     </div>
@@ -91,12 +97,12 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="fs-12 fw-medium text-muted">Reports awaiting doctor review</span>
                                 <div class="w-100 text-end">
-                                    <span class="fs-12 text-dark">5</span>
+                                    <span class="fs-12 text-warning">{{ $stats['urgentPendingReports'] }}</span>
                                     <span class="fs-11 text-muted">urgent</span>
                                 </div>
                             </div>
                             <div class="progress mt-2 ht-3">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 45%"></div>
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $stats['totalReports'] > 0 ? min(round(($stats['pendingReports'] / $stats['totalReports']) * 100), 100) : 0 }}%"></div>
                             </div>
                         </div>
                     </div>
@@ -124,12 +130,12 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="fs-12 fw-medium text-muted">Reports reviewed this month</span>
                                 <div class="w-100 text-end">
-                                    <span class="fs-12 text-dark">85%</span>
+                                    <span class="fs-12 text-success">{{ $stats['completionRate'] }}%</span>
                                     <span class="fs-11 text-muted">completion rate</span>
                                 </div>
                             </div>
                             <div class="progress mt-2 ht-3">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ $stats['completionRate'] }}%"></div>
                             </div>
                         </div>
                     </div>
@@ -157,12 +163,12 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="fs-12 fw-medium text-muted">Patients requiring immediate attention</span>
                                 <div class="w-100 text-end">
-                                    <span class="fs-12 text-dark">2</span>
+                                    <span class="fs-12 text-dark">{{ $stats['criticalRiskPatients'] }}</span>
                                     <span class="fs-11 text-muted">critical</span>
                                 </div>
                             </div>
                             <div class="progress mt-2 ht-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 60%"></div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $stats['totalPatients'] > 0 ? min(round(($stats['highRiskPatients'] / $stats['totalPatients']) * 100), 100) : 0 }}%"></div>
                             </div>
                         </div>
                     </div>
@@ -417,56 +423,23 @@
                     </div>
                     <div class="card-body custom-card-action">
                         <ul class="list-unstyled activity-feed">
+                            @forelse($recentActivity as $activity)
                             <li class="d-flex align-items-center gap-3 mb-4">
-                                <div class="avatar-text avatar-md bg-soft-primary text-primary rounded">
-                                    <i class="feather-file-text"></i>
+                                <div class="avatar-text avatar-md bg-soft-{{ $activity['color'] }} text-{{ $activity['color'] }} rounded">
+                                    <i class="{{ $activity['icon'] }}"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark">Caregiver submitted report</div>
-                                    <div class="fs-12 text-muted">Sarah Johnson submitted a report for patient Michael Chen</div>
-                                    <div class="fs-11 text-muted">10 minutes ago</div>
+                                    <div class="fw-semibold text-dark">{{ $activity['title'] }}</div>
+                                    <div class="fs-12 text-muted">{{ $activity['description'] }}</div>
+                                    <div class="fs-11 text-muted">{{ $activity['time'] }}</div>
                                 </div>
                             </li>
-                            <li class="d-flex align-items-center gap-3 mb-4">
-                                <div class="avatar-text avatar-md bg-soft-success text-success rounded">
-                                    <i class="feather-check-circle"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-semibold text-dark">Doctor reviewed report</div>
-                                    <div class="fs-12 text-muted">Dr. {{ auth()->user()->name ?? 'John Smith' }} reviewed report for Emma Wilson</div>
-                                    <div class="fs-11 text-muted">1 hour ago</div>
-                                </div>
+                            @empty
+                            <li class="text-center py-4">
+                                <i class="feather-inbox text-muted" style="font-size: 2rem;"></i>
+                                <p class="text-muted mt-2 mb-0">No recent activity</p>
                             </li>
-                            <li class="d-flex align-items-center gap-3 mb-4">
-                                <div class="avatar-text avatar-md bg-soft-info text-info rounded">
-                                    <i class="feather-calendar"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-semibold text-dark">Appointment scheduled</div>
-                                    <div class="fs-12 text-muted">New appointment scheduled for James Miller with Lisa Anderson</div>
-                                    <div class="fs-11 text-muted">2 hours ago</div>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center gap-3 mb-4">
-                                <div class="avatar-text avatar-md bg-soft-danger text-danger rounded">
-                                    <i class="feather-alert-triangle"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-semibold text-dark">Risk assigned</div>
-                                    <div class="fs-12 text-muted">High risk assigned to patient John Smith for fall risk</div>
-                                    <div class="fs-11 text-muted">3 hours ago</div>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center gap-3">
-                                <div class="avatar-text avatar-md bg-soft-warning text-warning rounded">
-                                    <i class="feather-user-plus"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-semibold text-dark">New caregiver added</div>
-                                    <div class="fs-12 text-muted">Robert Davis added to patient care team</div>
-                                    <div class="fs-11 text-muted">5 hours ago</div>
-                                </div>
-                            </li>
+                            @endforelse
                         </ul>
                     </div>
                 </div>
