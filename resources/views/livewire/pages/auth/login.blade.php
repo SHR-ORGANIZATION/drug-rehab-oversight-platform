@@ -26,7 +26,6 @@ new #[Layout('layouts.guest')] class extends Component
 
         $this->form->authenticate();
 
-        Session::invalidate();
         Session::regenerate();
 
         // Check if the authenticated user has the doctor role
