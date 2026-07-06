@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Caregivers;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\Caregiver;
+use Spatie\Permission\Models\Role;
 
 #[Layout('layouts.app')]
 class CaregiverCreate extends Component
@@ -28,12 +29,15 @@ class CaregiverCreate extends Component
     {
         $this->validate();
 
-        Caregiver::create([
+        $caregiver = Caregiver::create([
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
             'password' => bcrypt($this->password),
         ]);
+
+        // Assign caregiver role so they can access the portal
+        $caregiver->assignRole('caregiver');
 
         session()->flash('message', 'Caregiver created successfully!');
         return redirect()->route('admin.caregivers');

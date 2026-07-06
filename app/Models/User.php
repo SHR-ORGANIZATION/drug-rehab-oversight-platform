@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
+        'profile_image',
     ];
 
     /**
@@ -53,5 +54,15 @@ class User extends Authenticatable
     public function doctorReports()
     {
         return $this->hasMany(CaregiverReport::class, 'doctor_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(DoctorReview::class, 'doctor_id');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctor_id');
     }
 }

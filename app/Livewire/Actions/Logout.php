@@ -12,7 +12,9 @@ class Logout
      */
     public function __invoke(): void
     {
+        // Log out from both guards (doctor and caregiver)
         Auth::guard('web')->logout();
+        Auth::guard('caregiver')->logout();
 
         Session::invalidate();
         Session::regenerateToken();

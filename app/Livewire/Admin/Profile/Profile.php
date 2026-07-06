@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire\Caregiver\Profile;
+namespace App\Livewire\Admin\Profile;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\Caregiver;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,20 +22,20 @@ class Profile extends Component
 
     public function mount()
     {
-        /** @var Caregiver $caregiver */
-        $caregiver = Auth::guard('caregiver')->user();
-        $this->name = $caregiver->name;
-        $this->email = $caregiver->email;
-        $this->phone = $caregiver->phone;
-        $this->existingImage = $caregiver->profile_image;
+        /** @var User $doctor */
+        $doctor = Auth::user();
+        $this->name = $doctor->name;
+        $this->email = $doctor->email;
+        $this->phone = $doctor->phone ?? '';
+        $this->existingImage = $doctor->profile_image;
     }
 
     public function rules()
     {
-        $caregiverId = Auth::guard('caregiver')->id();
+        $doctorId = Auth::id();
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:caregivers,email,' . $caregiverId,
+            'email' => 'required|email|unique:users,email,' . $doctorId,
             'phone' => 'nullable|string|max:20',
             'profile_image' => 'nullable|image|max:2048',
         ];
@@ -45,8 +45,8 @@ class Profile extends Component
     {
         $this->validate();
 
-        /** @var Caregiver $caregiver */
-        $caregiver = Auth::guard('caregiver')->user();
+        /** @var User $doctor */
+        $doctor = Auth::user();
         
         $updateData = [
             'name' => $this->name,
@@ -57,19 +57,19 @@ class Profile extends Component
         // Handle image upload
         if ($this->profile_image) {
             // Delete old image if exists
-            if ($caregiver->profile_image) {
-                Storage::disk('public')->delete($caregiver->profile_image);
+            if ($doctor->profile_image) {
+                Storage::disk('public')->delete($doctor->profile_image);
             }
             $updateData['profile_image'] = $this->profile_image->store('profile-images', 'public');
         }
 
-        $caregiver->update($updateData);
+        $doctor->update($updateData);
 
         session()->flash('message', 'Profile updated successfully!');
     }
 
     public function render()
     {
-        return view('livewire.caregiver.profile.profile');
+        return view('livewire.admin.profile.profile');
     }
 }

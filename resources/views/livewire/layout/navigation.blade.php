@@ -12,8 +12,13 @@ new class extends Component
     {
         $logout();
 
-        $this->redirect('/', navigate: true);
+        $this->redirect('/', navigate: false);
     }
+
+    /**
+     * Listen for logout event dispatched from sidebar.
+     */
+    protected $listeners = ['logout' => 'logout'];
 }; ?>
 
 @php
@@ -135,12 +140,20 @@ new class extends Component
                     <!--! [Start] Profile Menu !-->
                     <div class="dropdown nxl-h-item">
                         <a href="javascript:void(0);" data-bs-toggle="dropdown" role="button" data-bs-auto-close="outside">
-                            <img src="{{ asset('assets/images/avatar/1.png') }}" alt="user-image" class="img-fluid user-avtar me-0" />
+                            @if($user && $user->profile_image)
+                                <img src="{{ asset('storage/' . $user->profile_image) }}" alt="user-image" class="img-fluid user-avtar me-0 rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                            @else
+                                <img src="{{ asset('assets/images/avatar/1.png') }}" alt="user-image" class="img-fluid user-avtar me-0" />
+                            @endif
                         </a>
                         <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-user-dropdown">
                             <div class="dropdown-header">
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ asset('assets/images/avatar/1.png') }}" alt="user-image" class="img-fluid user-avtar" />
+                                    @if($user && $user->profile_image)
+                                        <img src="{{ asset('storage/' . $user->profile_image) }}" alt="user-image" class="img-fluid user-avtar rounded-circle" style="width: 50px; height: 50px; object-fit: cover;" />
+                                    @else
+                                        <img src="{{ asset('assets/images/avatar/1.png') }}" alt="user-image" class="img-fluid user-avtar" />
+                                    @endif
                                     <div>
                                         <h6 class="text-dark mb-0">{{ $userPrefix }}{{ $user->name ?? 'User' }} <span class="badge bg-soft-{{ $isCaregiver ? 'info' : 'success' }} text-{{ $isCaregiver ? 'info' : 'success' }} ms-1">{{ $userTitle }}</span></h6>
                                         <span class="fs-12 fw-medium text-muted">{{ $user->email ?? 'user@rehabcare.com' }}</span>
@@ -154,15 +167,11 @@ new class extends Component
                                 <span>Profile</span>
                             </a>
                             @else
-                            <a href="javascript:void(0);" class="dropdown-item">
+                            <a href="{{ route('admin.profile') }}" class="dropdown-item">
                                 <i class="feather-user"></i>
                                 <span>Profile</span>
                             </a>
                             @endif
-                            <a href="javascript:void(0);" class="dropdown-item">
-                                <i class="feather-settings"></i>
-                                <span>Settings</span>
-                            </a>
                             <div class="dropdown-divider"></div>
                             <a href="javascript:void(0);" wire:click="$dispatch('logout')" class="dropdown-item">
                                 <i class="feather-log-out"></i>

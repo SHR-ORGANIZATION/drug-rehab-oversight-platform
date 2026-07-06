@@ -21,6 +21,7 @@ class Caregiver extends Authenticatable
         'email',
         'password',
         'phone',
+        'profile_image',
     ];
 
     /**

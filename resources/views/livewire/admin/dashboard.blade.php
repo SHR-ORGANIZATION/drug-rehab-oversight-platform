@@ -3,7 +3,7 @@
     <div class="page-header">
         <div class="page-header-left d-flex align-items-center">
             <div class="page-header-title">
-                <h5 class="m-b-10">RehabCare Dashboard</h5>
+                <h5 class="m-b-10">NexusCare Dashboard</h5>
             </div>
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
@@ -172,16 +172,13 @@
         </div>
 
         <div class="row">
-            <!-- [Payment Records] start -->
-            <div class="col-xxl-8">
+            <!--! [Start] Weekly Reports Chart !-->
+            <div class="col-12">
                 <div class="card stretch stretch-full">
                     <div class="card-header">
-                        <h5 class="card-title">Reports Submitted per Week</h5>
+                        <h5 class="card-title">Reports This Week</h5>
                         <div class="card-header-action">
                             <div class="card-header-btn">
-                                <div data-bs-toggle="tooltip" title="Delete">
-                                    <a href="javascript:void(0);" class="avatar-text avatar-xs bg-danger" data-bs-toggle="remove"> </a>
-                                </div>
                                 <div data-bs-toggle="tooltip" title="Refresh">
                                     <a href="javascript:void(0);" class="avatar-text avatar-xs bg-warning" data-bs-toggle="refresh"> </a>
                                 </div>
@@ -189,53 +186,52 @@
                                     <a href="javascript:void(0);" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"> </a>
                                 </div>
                             </div>
-                            <div class="dropdown">
-                                <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25, 25">
-                                    <div data-bs-toggle="tooltip" title="Options">
-                                        <i class="feather-more-vertical"></i>
-                                    </div>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" class="dropdown-item"><i class="feather-at-sign"></i>New</a>
-                                    <a href="javascript:void(0);" class="dropdown-item"><i class="feather-calendar"></i>Event</a>
-                                    <a href="javascript:void(0);" class="dropdown-item"><i class="feather-bell"></i>Snoozed</a>
-                                    <a href="javascript:void(0);" class="dropdown-item"><i class="feather-trash-2"></i>Deleted</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="javascript:void(0);" class="dropdown-item"><i class="feather-settings"></i>Settings</a>
-                                    <a href="javascript:void(0);" class="dropdown-item"><i class="feather-life-buoy"></i>Tips & Tricks</a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="card-body custom-card-action p-0">
-                        <div id="payment-records-chart"></div>
+                        <div id="weekly-reports-chart" style="min-height: 300px;"></div>
                     </div>
                     <div class="card-footer">
                         <div class="row g-4">
                             <div class="col-lg-4">
                                 <div class="p-3 border border-dashed rounded">
-                                    <div class="fs-12 text-muted mb-1">This Week</div>
-                                    <h6 class="fw-bold text-dark">24</h6>
-                                    <div class="progress mt-2 ht-3">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <div class="avatar-text avatar-sm bg-soft-primary text-primary rounded">
+                                            <i class="feather-file-text"></i>
+                                        </div>
+                                        <div class="fs-12 text-muted mb-0">This Week</div>
+                                    </div>
+                                    <h6 class="fw-bold text-dark mb-2">{{ $stats['totalReports'] }}</h6>
+                                    <div class="progress ht-3">
                                         <div class="progress-bar bg-primary" role="progressbar" style="width: 70%"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="p-3 border border-dashed rounded">
-                                    <div class="fs-12 text-muted mb-1">Last Week</div>
-                                    <h6 class="fw-bold text-dark">18</h6>
-                                    <div class="progress mt-2 ht-3">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 55%"></div>
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <div class="avatar-text avatar-sm bg-soft-warning text-warning rounded">
+                                            <i class="feather-clock"></i>
+                                        </div>
+                                        <div class="fs-12 text-muted mb-0">Pending Review</div>
+                                    </div>
+                                    <h6 class="fw-bold text-dark mb-2">{{ $stats['pendingReports'] }}</h6>
+                                    <div class="progress ht-3">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 45%"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="p-3 border border-dashed rounded">
-                                    <div class="fs-12 text-muted mb-1">Total</div>
-                                    <h6 class="fw-bold text-dark">156</h6>
-                                    <div class="progress mt-2 ht-3">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 85%"></div>
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <div class="avatar-text avatar-sm bg-soft-success text-success rounded">
+                                            <i class="feather-check-circle"></i>
+                                        </div>
+                                        <div class="fs-12 text-muted mb-0">Completed</div>
+                                    </div>
+                                    <h6 class="fw-bold text-dark mb-2">{{ $stats['completedReviews'] }}</h6>
+                                    <div class="progress ht-3">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -243,58 +239,7 @@
                     </div>
                 </div>
             </div>
-            <!-- [Payment Records] end -->
-            
-            <!-- [Total Sales] start -->
-            <div class="col-xxl-4">
-                <div class="card stretch stretch-full overflow-hidden">
-                    <div class="bg-primary text-white">
-                        <div class="p-4">
-                            <span class="badge bg-light text-primary text-dark float-end">12%</span>
-                            <div class="text-start">
-                                <h4 class="text-reset">{{ $stats['totalReports'] }}</h4>
-                                <p class="text-reset m-0">Total Reports</p>
-                            </div>
-                        </div>
-                        <div id="total-sales-color-graph"></div>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="hstack gap-3">
-                                <div class="avatar-image avatar-lg p-2 rounded">
-                                    <img class="img-fluid" src="{{ asset('assets/images/brand/shopify.png') }}" alt="" />
-                                </div>
-                                <div>
-                                    <a href="javascript:void(0);" class="d-block">Reports Reviewed</a>
-                                    <span class="fs-12 text-muted">This Month</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="fw-bold text-dark">{{ $stats['completedReviews'] }}</div>
-                                <div class="fs-12 text-end">Completed</div>
-                            </div>
-                        </div>
-                        <hr class="border-dashed my-3" />
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="hstack gap-3">
-                                <div class="avatar-image avatar-lg p-2 rounded">
-                                    <img class="img-fluid" src="{{ asset('assets/images/brand/app-store.png') }}" alt="" />
-                                </div>
-                                <div>
-                                    <a href="javascript:void(0);" class="d-block">Pending Review</a>
-                                    <span class="fs-12 text-muted">Awaiting</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="fw-bold text-dark">{{ $stats['pendingReports'] }}</div>
-                                <div class="fs-12 text-end">Reports</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="javascript:void(0);" class="card-footer fs-11 fw-bold text-uppercase text-center py-4">View Report Statistics</a>
-                </div>
-            </div>
-            <!-- [Total Sales] end -->
+            <!--! [End] Weekly Reports Chart !-->
         </div>
 
         <div class="row">
@@ -535,56 +480,49 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Reports per Week Chart (Bar Chart)
-    if (document.getElementById('payment-records-chart')) {
+    // Weekly Reports Bar Chart
+    if (document.getElementById('weekly-reports-chart')) {
         var options = {
             chart: {
                 type: 'bar',
-                height: 250,
+                height: 300,
                 toolbar: {
                     show: false
                 }
             },
             series: [{
-                name: 'Reports',
-                data: [12, 18, 15, 22, 17, 25, 24]
+                name: 'Reports Submitted',
+                data: [{{ $weeklyData['monday'] }}, {{ $weeklyData['tuesday'] }}, {{ $weeklyData['wednesday'] }}, {{ $weeklyData['thursday'] }}, {{ $weeklyData['friday'] }}, {{ $weeklyData['saturday'] }}, {{ $weeklyData['sunday'] }}]
             }],
             xaxis: {
-                categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
             },
             colors: ['#3454d1'],
             plotOptions: {
                 bar: {
-                    borderRadius: 4,
-                    horizontal: false
-                }
-            }
-        };
-        var chart = new ApexCharts(document.querySelector("#payment-records-chart"), options);
-        chart.render();
-    }
-    
-    // Total Sales Chart (Area Chart - Blue)
-    if (document.getElementById('total-sales-color-graph')) {
-        var areaOptions = {
-            chart: {
-                type: 'area',
-                height: 100,
-                sparkline: {
-                    enabled: true
+                    borderRadius: 6,
+                    horizontal: false,
+                    columnWidth: '60%'
                 }
             },
-            series: [{
-                data: [12, 18, 15, 22, 17, 25, 24]
-            }],
-            colors: ['#ffffff'],
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 600
+                }
+            },
             stroke: {
-                curve: 'smooth',
-                width: 2
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            grid: {
+                borderColor: '#f1f1f1'
             }
         };
-        var areaChart = new ApexCharts(document.querySelector("#total-sales-color-graph"), areaOptions);
-        areaChart.render();
+        var chart = new ApexCharts(document.querySelector("#weekly-reports-chart"), options);
+        chart.render();
     }
 });
 </script>

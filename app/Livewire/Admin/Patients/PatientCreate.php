@@ -5,7 +5,7 @@ namespace App\Livewire\Admin\Patients;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\Patient;
-use App\Models\User;
+use App\Models\Caregiver;
 use Carbon\Carbon;
 
 #[Layout('layouts.app')]
@@ -30,7 +30,7 @@ class PatientCreate extends Component
             'gender' => 'required|in:Male,Female',
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:255',
-            'caregiver_id' => 'required|exists:users,id',
+            'caregiver_id' => 'required|exists:caregivers,id',
             'admission_date' => 'required|date',
             'address' => 'nullable|string',
         ]);
@@ -57,7 +57,7 @@ class PatientCreate extends Component
 
     public function render()
     {
-        $caregivers = User::where('role', 'caregiver')->get();
+        $caregivers = Caregiver::all();
         return view('livewire.admin.patients.create', compact('caregivers'));
     }
 }

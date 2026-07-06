@@ -7,9 +7,16 @@
                 @else
                     <a href="{{ route('admin.dashboard') }}" class="b-brand">
                 @endif
-                    <!-- ========   RehabCare Logo   ============ -->
-                    <img src="{{ asset('assets/images/logo-full.png') }}" alt="RehabCare Logo" class="logo logo-lg" />
-                    <img src="{{ asset('assets/images/logo-abbr.png') }}" alt="RehabCare Logo" class="logo logo-sm" />
+                    <!-- ========   NexusCare Logo   ============ -->
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="brand-icon" style="width: 36px; height: 36px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span class="text-white fw-bold" style="font-size: 18px;">N</span>
+                        </div>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 700; color: #1a1a2e; line-height: 1.2;">NexusCare</div>
+                            <div style="font-size: 9px; color: #6c757d; letter-spacing: 0.5px;">Clinical & Care</div>
+                        </div>
+                    </div>
                 </a>
             </div>
             <div class="navbar-content">
@@ -19,10 +26,6 @@
                     {{-- ================================ --}}
                     {{-- CAREGIVER SIDEBAR MENU           --}}
                     {{-- ================================ --}}
-                    <li class="nxl-item nxl-caption">
-                        <label>Caregiver Portal</label>
-                        <span class="text-muted text-thin fs-10">RehabCare System</span>
-                    </li>
 
                     {{-- Dashboard --}}
                     <li class="nxl-item">
@@ -77,16 +80,28 @@
                     {{-- ================================ --}}
                     {{-- DOCTOR (ADMIN) SIDEBAR MENU      --}}
                     {{-- ================================ --}}
-                    <li class="nxl-item nxl-caption">
-                        <label>Doctor Portal</label>
-                        <span class="text-muted text-thin fs-10">RehabCare System</span>
-                    </li>
+
 
                     <li class="nxl-item">
                         <a href="{{ route('admin.dashboard') }}" class="nxl-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <span class="nxl-micon"><i class="feather-home"></i></span>
                             <span class="nxl-mtext">Dashboard</span>
                         </a>
+                    </li>
+
+
+                    <!-- Doctor Management -->
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="javascript:void(0);" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-activity"></i></span>
+                            <span class="nxl-mtext">Doctor Management</span>
+                            <span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
+                        </a>
+                        <ul class="nxl-submenu">
+                            <li class="nxl-item">
+                                <a class="nxl-link {{ request()->routeIs('admin.doctors') ? 'active' : '' }}" href="{{ route('admin.doctors') }}">Doctor List</a>
+                            </li>
+                        </ul>
                     </li>
 
                     <!-- Patient Management -->
@@ -117,23 +132,6 @@
                         </ul>
                     </li>
 
-                    <!-- Reports -->
-                    <li class="nxl-item nxl-hasmenu">
-                        <a href="javascript:void(0);" class="nxl-link">
-                            <span class="nxl-micon"><i class="feather-bar-chart-2"></i></span>
-                            <span class="nxl-mtext">Reports</span>
-                            <span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
-                        </a>
-                        <ul class="nxl-submenu">
-                            <li class="nxl-item">
-                                <a class="nxl-link" href="{{ route('admin.reports') }}">Caregiver Reports</a>
-                            </li>
-                            <li class="nxl-item">
-                                <a class="nxl-link" href="{{ route('admin.reports') }}">Reviewed Reports</a>
-                            </li>
-                        </ul>
-                    </li>
-
                     <li class="nxl-item">
                         <a href="{{ route('admin.reports') }}" class="nxl-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
                             <span class="nxl-micon"><i class="feather-star"></i></span>
@@ -155,21 +153,25 @@
                         </a>
                     </li>
 
-                    <li class="nxl-item">
-                        <a href="javascript:void(0);" class="nxl-link">
-                            <span class="nxl-micon"><i class="feather-user"></i></span>
-                            <span class="nxl-mtext">Profile</span>
-                        </a>
-                    </li>
-                @endif
 
-                    {{-- Logout (shared) --}}
-                    <li class="nxl-item">
-                        <a href="javascript:void(0);" wire:click="$dispatch('logout')" class="nxl-link">
-                            <span class="nxl-micon"><i class="feather-log-out"></i></span>
-                            <span class="nxl-mtext">Logout</span>
+                    <!-- Reports -->
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="javascript:void(0);" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-bar-chart-2"></i></span>
+                            <span class="nxl-mtext">Reports</span>
+                            <span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
                         </a>
+                        <ul class="nxl-submenu">
+                            <li class="nxl-item">
+                                <a class="nxl-link" href="{{ route('admin.reports') }}">Caregiver Reports</a>
+                            </li>
+                            <li class="nxl-item">
+                                <a class="nxl-link" href="{{ route('admin.reports') }}">Reviewed Reports</a>
+                            </li>
+                        </ul>
                     </li>
+
+                @endif
                 </ul>
             </div>
         </div>

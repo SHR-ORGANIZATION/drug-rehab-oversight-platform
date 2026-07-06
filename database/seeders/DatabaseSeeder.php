@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 
         // Create Doctor (Admin) user
         $doctor = User::create([
-            'name' => 'Dr. John Smith',
+            'name' => 'Admin',
             'email' => 'doctor@rehabcare.com',
             'password' => Hash::make('password'),
             'phone' => '+1234567890',

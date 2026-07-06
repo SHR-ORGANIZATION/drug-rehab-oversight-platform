@@ -10,6 +10,7 @@ use App\Models\DoctorReview;
 use App\Models\Appointment;
 use App\Models\Caregiver;
 use App\Models\User;
+use Carbon\Carbon;
 
 #[Layout('layouts.app')]
 class Dashboard extends Component
@@ -26,6 +27,9 @@ class Dashboard extends Component
             'upcomingAppointments' => Appointment::where('appointment_date', '>=', now())
                 ->whereIn('status', ['pending', 'approved'])->count(),
         ];
+
+        // Get weekly report data (current week)
+        $weeklyData = $this->getWeeklyReportData();
 
         $recentReports = CaregiverReport::with(['patient', 'caregiver'])
             ->latest('report_date')
@@ -50,6 +54,31 @@ class Dashboard extends Component
             'recentReports' => $recentReports,
             'upcomingAppointments' => $upcomingAppointments,
             'highRiskReviews' => $highRiskReviews,
+            'weeklyData' => $weeklyData,
         ]);
+    }
+
+    private function getWeeklyReportData(): array
+    {
+        $startOfWeek = Carbon::now()->startOfWeek(); // Monday
+        $data = [
+            'monday' => 0,
+            'tuesday' => 0,
+            'wednesday' => 0,
+            'thursday' => 0,
+            'friday' => 0,
+            'saturday' => 0,
+            'sunday' => 0,
+        ];
+
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+        for ($i = 0; $i < 7; $i++) {
+            $date = $startOfWeek->copy()->addDays($i);
+            $count = CaregiverReport::whereDate('report_date', $date)->count();
+            $data[$days[$i]] = $count;
+        }
+
+        return $data;
     }
 }
