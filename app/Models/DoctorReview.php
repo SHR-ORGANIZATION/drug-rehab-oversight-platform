@@ -15,6 +15,22 @@ class DoctorReview extends Model
         'risk_type_id',
         'doctor_notes',
         'recommendation',
+        'subjective_notes',
+        'objective_notes',
+        'assessment_notes',
+        'treatment_plan',
+        'risk_severity',
+        'icd10_code',
+        'treatment_goals',
+        'medication_changes',
+        'follow_up_date',
+        'review_status',
+        'reviewed_at',
+    ];
+
+    protected $casts = [
+        'follow_up_date' => 'date',
+        'reviewed_at' => 'datetime',
     ];
 
     public function report()

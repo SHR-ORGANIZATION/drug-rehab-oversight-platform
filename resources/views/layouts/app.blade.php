@@ -21,7 +21,7 @@
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom.css') }}" /> --}}
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     @livewireStyles
     
     <!-- Page-specific Styles -->
@@ -64,7 +64,7 @@
     <script src="{{ asset('assets/js/theme-customizer-init.min.js') }}"></script>
     
     <!-- Dashboard Scripts (Only load on dashboard page) -->
-    @if(request()->routeIs('dashboard') || request()->is('/'))
+    @if(request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') || request()->routeIs('caregiver.dashboard') || request()->is('/'))
     <script src="{{ asset('assets/js/dashboard-init.min.js') }}"></script>
     @endif
     

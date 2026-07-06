@@ -4,7 +4,7 @@ namespace App\Livewire\Admin\Caregivers;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use App\Models\User;
+use App\Models\Caregiver;
 
 #[Layout('layouts.app')]
 class CaregiverCreate extends Component
@@ -18,7 +18,7 @@ class CaregiverCreate extends Component
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:caregivers,email',
             'phone' => 'nullable|string|max:20',
             'password' => 'required|min:8',
         ];
@@ -28,16 +28,15 @@ class CaregiverCreate extends Component
     {
         $this->validate();
 
-        User::create([
+        Caregiver::create([
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
             'password' => bcrypt($this->password),
-            'role' => 'caregiver',
         ]);
 
         session()->flash('message', 'Caregiver created successfully!');
-        return redirect()->route('caregivers');
+        return redirect()->route('admin.caregivers');
     }
 
     public function render()

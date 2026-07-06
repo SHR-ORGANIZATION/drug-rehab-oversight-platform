@@ -46,7 +46,7 @@
                                     <i class="feather-users"></i>
                                 </div>
                                 <div>
-                                    <div class="fs-4 fw-bold text-dark"><span class="counter">124</span></div>
+                                    <div class="fs-4 fw-bold text-dark"><span class="counter">{{ $stats['totalPatients'] }}</span></div>
                                     <h3 class="fs-13 fw-semibold text-truncate-1-line">Total Patients</h3>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                     <i class="feather-clock"></i>
                                 </div>
                                 <div>
-                                    <div class="fs-4 fw-bold text-dark"><span class="counter">18</span></div>
+                                    <div class="fs-4 fw-bold text-dark"><span class="counter">{{ $stats['pendingReports'] }}</span></div>
                                     <h3 class="fs-13 fw-semibold text-truncate-1-line">Pending Reports</h3>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
                                     <i class="feather-check-circle"></i>
                                 </div>
                                 <div>
-                                    <div class="fs-4 fw-bold text-dark"><span class="counter">156</span></div>
+                                    <div class="fs-4 fw-bold text-dark"><span class="counter">{{ $stats['completedReviews'] }}</span></div>
                                     <h3 class="fs-13 fw-semibold text-truncate-1-line">Completed Reviews</h3>
                                 </div>
                             </div>
@@ -145,7 +145,7 @@
                                     <i class="feather-alert-triangle"></i>
                                 </div>
                                 <div>
-                                    <div class="fs-4 fw-bold text-dark"><span class="counter">8</span></div>
+                                    <div class="fs-4 fw-bold text-dark"><span class="counter">{{ $stats['highRiskPatients'] }}</span></div>
                                     <h3 class="fs-13 fw-semibold text-truncate-1-line">High Risk Patients</h3>
                                 </div>
                             </div>
@@ -252,7 +252,7 @@
                         <div class="p-4">
                             <span class="badge bg-light text-primary text-dark float-end">12%</span>
                             <div class="text-start">
-                                <h4 class="text-reset">30,569</h4>
+                                <h4 class="text-reset">{{ $stats['totalReports'] }}</h4>
                                 <p class="text-reset m-0">Total Reports</p>
                             </div>
                         </div>
@@ -270,7 +270,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="fw-bold text-dark">156</div>
+                                <div class="fw-bold text-dark">{{ $stats['completedReviews'] }}</div>
                                 <div class="fs-12 text-end">Completed</div>
                             </div>
                         </div>
@@ -286,7 +286,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="fw-bold text-dark">18</div>
+                                <div class="fw-bold text-dark">{{ $stats['pendingReports'] }}</div>
                                 <div class="fs-12 text-end">Reports</div>
                             </div>
                         </div>
@@ -304,7 +304,7 @@
                     <div class="card-header">
                         <h5 class="card-title">Recent Caregiver Reports</h5>
                         <div class="card-header-action">
-                            <a href="{{ route('reports') }}" class="btn btn-sm btn-primary">View All</a>
+                            <a href="{{ route('admin.reports') }}" class="btn btn-sm btn-primary">View All</a>
                         </div>
                     </div>
                     <div class="card-body custom-card-action p-0">
@@ -320,70 +320,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @forelse($recentReports as $report)
                                     <tr>
                                         <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Michael Chen</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00124</span>
+                                            <a href="{{ route('admin.reports.review', $report->id) }}">
+                                                <span class="d-block">{{ $report->patient->full_name ?? 'N/A' }}</span>
+                                                <span class="fs-12 d-block fw-normal text-muted">ID: {{ $report->patient->patient_id ?? 'N/A' }}</span>
                                             </a>
                                         </td>
-                                        <td>Sarah Johnson</td>
-                                        <td>04/07/2026</td>
+                                        <td>{{ $report->caregiver->name ?? 'N/A' }}</td>
+                                        <td>{{ $report->report_date->format('d/m/Y') }}</td>
                                         <td>
-                                            <span class="badge bg-soft-warning text-warning">Pending</span>
+                                            <span class="badge bg-soft-{{ $report->status === 'pending' ? 'warning' : 'success' }} text-{{ $report->status === 'pending' ? 'warning' : 'success' }}">
+                                                {{ ucfirst($report->status) }}
+                                            </span>
                                         </td>
                                         <td class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-primary">Review</a>
+                                            <a href="{{ route('admin.reports.review', $report->id) }}" class="btn btn-sm btn-{{ $report->status === 'pending' ? 'primary' : 'outline-primary' }}">
+                                                {{ $report->status === 'pending' ? 'Review' : 'View' }}
+                                            </a>
                                         </td>
                                     </tr>
+                                    @empty
                                     <tr>
-                                        <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Emma Wilson</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00156</span>
-                                            </a>
-                                        </td>
-                                        <td>David Brown</td>
-                                        <td>03/07/2026</td>
-                                        <td>
-                                            <span class="badge bg-soft-success text-success">Reviewed</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary">View</a>
-                                        </td>
+                                        <td colspan="5" class="text-center py-4 text-muted">No reports yet</td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">James Miller</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00189</span>
-                                            </a>
-                                        </td>
-                                        <td>Lisa Anderson</td>
-                                        <td>02/07/2026</td>
-                                        <td>
-                                            <span class="badge bg-soft-warning text-warning">Pending</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-primary">Review</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Olivia Taylor</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00201</span>
-                                            </a>
-                                        </td>
-                                        <td>Robert Davis</td>
-                                        <td>01/07/2026</td>
-                                        <td>
-                                            <span class="badge bg-soft-success text-success">Reviewed</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary">View</a>
-                                        </td>
-                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -398,7 +360,7 @@
                     <div class="card-header">
                         <h5 class="card-title">High Risk Patients</h5>
                         <div class="card-header-action">
-                            <a href="{{ route('risks') }}" class="btn btn-sm btn-danger">Manage Risks</a>
+                            <a href="{{ route('admin.risks') }}" class="btn btn-sm btn-danger">Manage Risks</a>
                         </div>
                     </div>
                     <div class="card-body custom-card-action p-0">
@@ -413,50 +375,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @forelse($highRiskReviews as $review)
                                     <tr>
                                         <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">John Smith</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00045</span>
+                                            <a href="{{ route('admin.reports.review', $review->report->id ?? 0) }}">
+                                                <span class="d-block">{{ $review->report->patient->full_name ?? 'N/A' }}</span>
+                                                <span class="fs-12 d-block fw-normal text-muted">ID: {{ $review->report->patient->patient_id ?? 'N/A' }}</span>
                                             </a>
                                         </td>
-                                        <td><span class="badge bg-soft-danger text-danger">High</span></td>
-                                        <td>02/07/2026</td>
-                                        <td>Dr. {{ auth()->user()->name ?? 'John Smith' }}</td>
-                                    </tr>
-                                    <tr>
                                         <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Mary Johnson</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00078</span>
-                                            </a>
+                                            @php
+                                                $riskColors = ['low' => 'success', 'medium' => 'info', 'high' => 'warning', 'critical' => 'danger'];
+                                                $riskColor = $riskColors[$review->risk_severity] ?? 'secondary';
+                                            @endphp
+                                            <span class="badge bg-soft-{{ $riskColor }} text-{{ $riskColor }}">{{ ucfirst($review->risk_severity) }}</span>
                                         </td>
-                                        <td><span class="badge bg-soft-warning text-warning">Medium</span></td>
-                                        <td>03/07/2026</td>
-                                        <td>Dr. {{ auth()->user()->name ?? 'John Smith' }}</td>
+                                        <td>{{ $review->created_at->format('d/m/Y') }}</td>
+                                        <td>{{ $review->doctor->name ?? 'N/A' }}</td>
                                     </tr>
+                                    @empty
                                     <tr>
-                                        <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Robert Wilson</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00092</span>
-                                            </a>
-                                        </td>
-                                        <td><span class="badge bg-soft-danger text-danger">High</span></td>
-                                        <td>04/07/2026</td>
-                                        <td>Dr. {{ auth()->user()->name ?? 'John Smith' }}</td>
+                                        <td colspan="4" class="text-center py-4 text-muted">No high risk patients</td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Patricia Brown</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00105</span>
-                                            </a>
-                                        </td>
-                                        <td><span class="badge bg-soft-info text-info">Low</span></td>
-                                        <td>04/07/2026</td>
-                                        <td>Dr. {{ auth()->user()->name ?? 'John Smith' }}</td>
-                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -471,7 +412,7 @@
                     <div class="card-header">
                         <h5 class="card-title">Upcoming Appointments</h5>
                         <div class="card-header-action">
-                            <a href="{{ route('appointments') }}" class="btn btn-sm btn-primary">View All</a>
+                            <a href="{{ route('admin.appointments') }}" class="btn btn-sm btn-primary">View All</a>
                         </div>
                     </div>
                     <div class="card-body custom-card-action p-0">
@@ -487,70 +428,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @forelse($upcomingAppointments as $apt)
                                     <tr>
                                         <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Michael Chen</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00124</span>
-                                            </a>
+                                            <div>
+                                                <span class="d-block">{{ $apt->patient->full_name ?? 'N/A' }}</span>
+                                                <span class="fs-12 d-block fw-normal text-muted">ID: {{ $apt->patient->patient_id ?? 'N/A' }}</span>
+                                            </div>
                                         </td>
-                                        <td>Sarah Johnson</td>
-                                        <td>05/07/2026 10:00 AM</td>
+                                        <td>{{ $apt->caregiver->name ?? 'N/A' }}</td>
+                                        <td>{{ $apt->appointment_date->format('d/m/Y h:i A') }}</td>
                                         <td>
-                                            <span class="badge bg-soft-primary text-primary">Scheduled</span>
+                                            @php
+                                                $aptColors = ['pending' => 'warning', 'approved' => 'primary', 'rejected' => 'danger', 'completed' => 'success'];
+                                                $aptColor = $aptColors[$apt->status] ?? 'secondary';
+                                            @endphp
+                                            <span class="badge bg-soft-{{ $aptColor }} text-{{ $aptColor }}">{{ ucfirst($apt->status) }}</span>
                                         </td>
                                         <td class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary">View</a>
+                                            <a href="{{ route('admin.appointments') }}" class="btn btn-sm btn-outline-primary">View</a>
                                         </td>
                                     </tr>
+                                    @empty
                                     <tr>
-                                        <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Emma Wilson</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00156</span>
-                                            </a>
-                                        </td>
-                                        <td>David Brown</td>
-                                        <td>05/07/2026 2:30 PM</td>
-                                        <td>
-                                            <span class="badge bg-soft-primary text-primary">Scheduled</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary">View</a>
-                                        </td>
+                                        <td colspan="5" class="text-center py-4 text-muted">No upcoming appointments</td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">James Miller</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00189</span>
-                                            </a>
-                                        </td>
-                                        <td>Lisa Anderson</td>
-                                        <td>06/07/2026 9:00 AM</td>
-                                        <td>
-                                            <span class="badge bg-soft-warning text-warning">Pending</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0);">
-                                                <span class="d-block">Olivia Taylor</span>
-                                                <span class="fs-12 d-block fw-normal text-muted">ID: P-00201</span>
-                                            </a>
-                                        </td>
-                                        <td>Robert Davis</td>
-                                        <td>06/07/2026 11:30 AM</td>
-                                        <td>
-                                            <span class="badge bg-soft-primary text-primary">Scheduled</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary">View</a>
-                                        </td>
-                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

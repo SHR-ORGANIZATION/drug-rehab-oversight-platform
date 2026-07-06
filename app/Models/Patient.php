@@ -26,11 +26,21 @@ class Patient extends Model
 
     public function caregiver()
     {
-        return $this->belongsTo(User::class, 'caregiver_id');
+        return $this->belongsTo(Caregiver::class, 'caregiver_id');
     }
 
     public function reports()
     {
         return $this->hasMany(CaregiverReport::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasManyThrough(
+            DoctorReview::class,
+            CaregiverReport::class,
+            'patient_id',
+            'caregiver_report_id'
+        );
     }
 }

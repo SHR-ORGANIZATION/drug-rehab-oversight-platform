@@ -20,7 +20,7 @@ return new class extends Migration
         ->cascadeOnDelete();
 
     $table->foreignId('caregiver_id')
-        ->constrained('users')
+        ->constrained('caregivers')
         ->cascadeOnDelete();
 
     $table->date('report_date');

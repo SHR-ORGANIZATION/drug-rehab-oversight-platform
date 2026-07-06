@@ -52,7 +52,7 @@ class PatientCreate extends Component
         ]);
 
         session()->flash('message', 'Patient created successfully!');
-        return redirect()->route('patients');
+        return redirect()->route('admin.patients');
     }
 
     public function render()

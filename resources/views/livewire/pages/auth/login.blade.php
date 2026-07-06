@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Forms\LoginForm;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -8,6 +9,8 @@ use Livewire\Volt\Component;
 new #[Layout('layouts.guest')] class extends Component
 {
     public LoginForm $form;
+
+    public string $roleError = '';
 
     /**
      * Handle an incoming authentication request.
@@ -20,7 +23,17 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: false);
+        // Check if the authenticated user has the doctor role
+        $user = Auth::user();
+        if (!$user->hasRole('doctor')) {
+            Auth::logout();
+            $this->roleError = 'This login is for doctors only. If you are a caregiver, please use the caregiver portal.';
+            Session::invalidate();
+            Session::regenerate();
+            return;
+        }
+
+        $this->redirect(route('admin.dashboard', absolute: false), navigate: false);
     }
 }; ?>
 
@@ -39,9 +52,14 @@ new #[Layout('layouts.guest')] class extends Component
                     <div class="wd-50 mb-5">
                         <img src="{{ asset('assets/images/logo-abbr.png') }}" alt="" class="img-fluid">
                     </div>
-                    <h2 class="fs-20 fw-bolder mb-4">Login</h2>
+                    <h2 class="fs-20 fw-bolder mb-4">Doctor Portal</h2>
                     <h4 class="fs-13 fw-bold mb-2">Login to your account</h4>
-                    <p class="fs-12 fw-medium text-muted">Thank you for get back <strong>Nelel</strong> web applications, let's access our the best recommendation for you.</p>
+                    <p class="fs-12 fw-medium text-muted">Welcome back to the Rehabilitation Monitoring System. Please sign in with your doctor credentials.</p>
+                    @if($roleError)
+                    <div class="alert alert-danger mt-3 mb-0">
+                        <i class="feather-alert-circle me-2"></i>{{ $roleError }}
+                    </div>
+                    @endif
                     <form wire:submit="login" class="w-100 mt-4 pt-2">
                         <div class="mb-4">
                             <input type="email" wire:model="form.email" class="form-control" placeholder="Email or Username" required autocomplete="username">
@@ -81,8 +99,8 @@ new #[Layout('layouts.guest')] class extends Component
                         </div>
                     </div>
                     <div class="mt-5 text-muted">
-                        <span> Don't have an account?</span>
-                        <a href="{{ route('register') }}" class="fw-bold" wire:navigate>Create an Account</a>
+                        <span>Caregiver? </span>
+                        <a href="{{ route('caregiver.login') }}" class="fw-bold" wire:navigate>Caregiver Portal Login</a>
                     </div>
                 </div>
             </div>

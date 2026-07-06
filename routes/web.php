@@ -1,8 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\Patients\PatientList;
+use App\Livewire\Admin\Patients\PatientCreate;
+use App\Livewire\Admin\Patients\PatientView;
+use App\Livewire\Admin\Caregivers\CaregiverList;
+use App\Livewire\Admin\Caregivers\CaregiverCreate;
+use App\Livewire\Admin\DoctorReviews\DoctorReviews;
+use App\Livewire\Admin\DoctorReviews\ReviewReport;
+use App\Livewire\Admin\Appointments\AppointmentList;
+use App\Livewire\Admin\Risks\RiskType;
+use App\Livewire\Caregiver\Dashboard\Dashboard as CaregiverDashboard;
+use App\Livewire\Caregiver\Patients\MyPatients;
+use App\Livewire\Caregiver\Reports\MyReports;
+use App\Livewire\Caregiver\Reports\CreateReport;
+use App\Livewire\Caregiver\Appointments\MyAppointments;
+use App\Livewire\Caregiver\Profile\Profile as CaregiverProfile;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,50 +36,48 @@ require __DIR__.'/auth.php';
 
 /*
 |--------------------------------------------------------------------------
-| Authenticated Routes
+| Authenticated Routes - Default Redirect
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth'])->group(function () {
-    /*
-    |-------------------------
-    | Shared Dashboard Redirect
-    |-------------------------
-    */
     Route::get('/dashboard', function () {
+        // Default redirect - each portal's login handles its own redirect
         return redirect()->route('admin.dashboard');
     })->name('dashboard');
 });
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN ROUTES (DOCTOR)
+| ADMIN ROUTES (DOCTOR) - Protected by auth + role:doctor
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
-Route::get('/patients', \App\Livewire\Admin\Patients\PatientList::class)->name('patients');
-Route::get('/patients/create', \App\Livewire\Admin\Patients\PatientCreate::class)->name('patients.create');
-Route::get('/patients/{id}', \App\Livewire\Admin\Patients\PatientView::class)->name('patients.view');
-Route::view('/patients/{id}/edit', 'livewire.admin.patients.edit')->name('patients.edit');
-    Route::get('/caregivers', \App\Livewire\Admin\Caregivers\CaregiverList::class)->name('caregivers');
-    Route::get('/caregivers/create', \App\Livewire\Admin\Caregivers\CaregiverCreate::class)->name('caregivers.create');
-    Route::get('/reports', \App\Livewire\Admin\DoctorReviews\DoctorReviews::class)->name('reports');
-    Route::view('/appointments', 'livewire.admin.appointments.appointment-list')->name('appointments');
-    Route::view('/risks', 'livewire.admin.risks.risk-type')->name('risks');
+Route::middleware(['auth', 'role:doctor'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', AdminDashboard::class)->name('admin.dashboard');
+    Route::get('/patients', PatientList::class)->name('admin.patients');
+    Route::get('/patients/create', PatientCreate::class)->name('admin.patients.create');
+    Route::get('/patients/{id}', PatientView::class)->name('admin.patients.view');
+    Route::view('/patients/{id}/edit', 'livewire.admin.patients.edit')->name('admin.patients.edit');
+    Route::get('/caregivers', CaregiverList::class)->name('admin.caregivers');
+    Route::get('/caregivers/create', CaregiverCreate::class)->name('admin.caregivers.create');
+    Route::get('/reports', DoctorReviews::class)->name('admin.reports');
+    Route::get('/reports/{id}/review', ReviewReport::class)->name('admin.reports.review');
+    Route::get('/appointments', AppointmentList::class)->name('admin.appointments');
+    Route::get('/risks', RiskType::class)->name('admin.risks');
 });
 
 /*
 |--------------------------------------------------------------------------
-| CAREGIVER ROUTES
+| CAREGIVER ROUTES - Protected by auth + role:caregiver
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth','verified'])->prefix('caregiver')->group(function () {
-    Route::view('/dashboard', 'livewire.caregiver.dashboard')->name('dashboard');
-    Route::view('/patients', 'livewire.caregiver.patients.my-patients')->name('patients');
-    Route::view('/reports', 'livewire.caregiver.reports.my-reports')->name('reports');
-    Route::view('/appointments', 'livewire.caregiver.appointments.my-appointments')->name('appointments');
-    Route::view('/appointments/create', 'livewire.caregiver.appointments.create-appointment')->name('appointments.create');
+Route::middleware(['auth', 'role:caregiver'])->prefix('caregiver')->group(function () {
+    Route::get('/dashboard', CaregiverDashboard::class)->name('caregiver.dashboard');
+    Route::get('/patients', MyPatients::class)->name('caregiver.patients');
+    Route::get('/reports', MyReports::class)->name('caregiver.reports');
+    Route::get('/reports/create', CreateReport::class)->name('caregiver.reports.create');
+    Route::get('/appointments', MyAppointments::class)->name('caregiver.appointments');
+    Route::get('/profile', CaregiverProfile::class)->name('caregiver.profile');
 });

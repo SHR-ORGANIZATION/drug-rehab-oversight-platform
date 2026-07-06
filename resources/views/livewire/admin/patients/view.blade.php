@@ -7,7 +7,7 @@
             </div>
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('patients') }}">Patients</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.patients') }}">Patients</a></li>
                 <li class="breadcrumb-item">Patient Details</li>
             </ul>
         </div>
@@ -26,7 +26,7 @@
                     <a href="javascript:void(0);" class="btn btn-icon btn-light-brand" data-bs-toggle="modal" data-bs-target="#deletePatientModal">
                         <i class="feather-trash-2"></i>
                     </a>
-                    <a href="{{ route('patients') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('admin.patients') }}" class="btn btn-outline-primary">
                         <i class="feather-arrow-left me-2"></i>
                         <span>Back to Patients</span>
                     </a>

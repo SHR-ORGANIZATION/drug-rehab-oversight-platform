@@ -14,7 +14,17 @@ class CaregiverReport extends Model
         'report_date',
         'symptoms',
         'observations',
+        'vital_signs',
+        'pain_level',
+        'functional_status',
+        'session_type',
+        'mood_behavior',
         'status',
+    ];
+
+    protected $casts = [
+        'pain_level' => 'integer',
+        'report_date' => 'date',
     ];
 
     public function patient()
@@ -24,7 +34,7 @@ class CaregiverReport extends Model
 
     public function caregiver()
     {
-        return $this->belongsTo(User::class, 'caregiver_id');
+        return $this->belongsTo(Caregiver::class, 'caregiver_id');
     }
 
     public function review()

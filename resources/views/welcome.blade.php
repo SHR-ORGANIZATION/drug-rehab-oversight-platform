@@ -96,13 +96,14 @@
 				<a href="#vision" class="hover:text-blue-600">Vision</a>
 				<a href="#mission" class="hover:text-blue-600">Mission</a>
 				<a href="#contact" class="hover:text-blue-600">Contact</a>
-				<a href="{{ route('login') }}" class="px-3 py-2 bg-blue-600 text-white rounded-md text-sm">Login</a>
+				<a href="{{ route('login') }}" class="px-3 py-2 bg-blue-600 text-white rounded-md text-sm">Doctor Login</a>
+				<a href="{{ route('caregiver.login') }}" class="px-3 py-2 bg-purple-600 text-white rounded-md text-sm">Caregiver Login</a>
 				<a href="{{ route('register') }}" class="px-3 py-2 border border-gray-200 rounded-md text-sm">Register</a>
 			</nav>
 
 			<div class="md:hidden flex items-center gap-3">
-				<a href="{{ route('login') }}" class="px-3 py-2 bg-blue-600 text-white rounded-md text-sm">Login</a>
-				<a href="{{ route('register') }}" class="px-3 py-2 border border-gray-200 rounded-md text-sm">Register</a>
+				<a href="{{ route('login') }}" class="px-3 py-2 bg-blue-600 text-white rounded-md text-sm">Doctor</a>
+				<a href="{{ route('caregiver.login') }}" class="px-3 py-2 bg-purple-600 text-white rounded-md text-sm">Caregiver</a>
 			</div>
 		</div>
 	</header>

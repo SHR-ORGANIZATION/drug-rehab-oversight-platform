@@ -45,7 +45,7 @@
                             </a>
                         </div>
                     </div>
-                    <a href="{{ route('patients.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.patients.create') }}" class="btn btn-primary">
                         <i class="feather-plus me-2"></i>
                         <span>Add Patient</span>
                     </a>
@@ -189,7 +189,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="{{ route('patients.view', $patient->id) }}" class="hstack gap-3">
+                                            <a href="{{ route('admin.patients.view', $patient->id) }}" class="hstack gap-3">
                                                 <div class="avatar-image avatar-md">
                                                     <img src="{{ asset('assets/images/avatar/1.png') }}" alt="" class="img-fluid">
                                                 </div>
@@ -208,7 +208,7 @@
                                         </td>
                                         <td>
                                             <div class="hstack gap-2 justify-content-end">
-                                                <a href="{{ route('patients.view', $patient->id) }}" class="avatar-text avatar-md">
+                                                <a href="{{ route('admin.patients.view', $patient->id) }}" class="avatar-text avatar-md">
                                                     <i class="feather feather-eye"></i>
                                                 </a>
                                                 <div class="dropdown">
@@ -217,7 +217,7 @@
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="{{ route('patients.edit', $patient->id) }}">
+                                                            <a class="dropdown-item" href="{{ route('admin.patients.edit', $patient->id) }}">
                                                                 <i class="feather feather-edit-3 me-3"></i>
                                                                 <span>Edit</span>
                                                             </a>

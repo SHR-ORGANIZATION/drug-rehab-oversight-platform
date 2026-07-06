@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('patient_id')->unique();
             $table->foreignId('caregiver_id')
-                ->constrained('users')
+                ->constrained('caregivers')
                 ->cascadeOnDelete();
             $table->string('full_name');
             $table->enum('gender', ['Male', 'Female']);

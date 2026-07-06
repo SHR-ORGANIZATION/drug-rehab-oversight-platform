@@ -16,6 +16,15 @@ new class extends Component
     }
 }; ?>
 
+@php
+    $isCaregiver = \Illuminate\Support\Facades\Auth::guard('caregiver')->check();
+    $user = $isCaregiver
+        ? \Illuminate\Support\Facades\Auth::guard('caregiver')->user()
+        : auth()->user();
+    $userTitle = $isCaregiver ? 'Caregiver' : 'Doctor';
+    $userPrefix = $isCaregiver ? '' : 'Dr. ';
+@endphp
+
 <div>
    <header class="nxl-header">
         <div class="header-wrapper">
@@ -61,13 +70,13 @@ new class extends Component
             <!--! [Start] Header Right !-->
             <div class="header-right ms-auto">
                 <div class="d-flex align-items-center">
-                    <!--! [Start] Doctor Name !-->
+                    <!--! [Start] User Name !-->
                     <div class="dropdown nxl-h-item nxl-header-search">
                         <a href="javascript:void(0);" class="nxl-head-link me-0" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                            <span class="fs-14 fw-bold text-dark">Dr. {{ auth()->user()->name ?? 'John Smith' }}</span>
+                            <span class="fs-14 fw-bold text-dark">{{ $userPrefix }}{{ $user->name ?? 'User' }}</span>
                         </a>
                     </div>
-                    <!--! [End] Doctor Name !-->
+                    <!--! [End] User Name !-->
                     
                     <!--! [Start] Notifications !-->
                     <div class="dropdown nxl-h-item">
@@ -133,22 +142,29 @@ new class extends Component
                                 <div class="d-flex align-items-center">
                                     <img src="{{ asset('assets/images/avatar/1.png') }}" alt="user-image" class="img-fluid user-avtar" />
                                     <div>
-                                        <h6 class="text-dark mb-0">Dr. {{ auth()->user()->name ?? 'John Smith' }} <span class="badge bg-soft-success text-success ms-1">Doctor</span></h6>
-                                        <span class="fs-12 fw-medium text-muted">{{ auth()->user()->email ?? 'doctor@rehabcare.com' }}</span>
+                                        <h6 class="text-dark mb-0">{{ $userPrefix }}{{ $user->name ?? 'User' }} <span class="badge bg-soft-{{ $isCaregiver ? 'info' : 'success' }} text-{{ $isCaregiver ? 'info' : 'success' }} ms-1">{{ $userTitle }}</span></h6>
+                                        <span class="fs-12 fw-medium text-muted">{{ $user->email ?? 'user@rehabcare.com' }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="dropdown-divider"></div>
+                            @if($isCaregiver)
+                            <a href="{{ route('caregiver.profile') }}" class="dropdown-item">
+                                <i class="feather-user"></i>
+                                <span>Profile</span>
+                            </a>
+                            @else
                             <a href="javascript:void(0);" class="dropdown-item">
                                 <i class="feather-user"></i>
                                 <span>Profile</span>
                             </a>
+                            @endif
                             <a href="javascript:void(0);" class="dropdown-item">
                                 <i class="feather-settings"></i>
                                 <span>Settings</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="javascript:void(0);" wire:submit="logout" class="dropdown-item">
+                            <a href="javascript:void(0);" wire:click="$dispatch('logout')" class="dropdown-item">
                                 <i class="feather-log-out"></i>
                                 <span>Logout</span>
                             </a>

@@ -4,7 +4,7 @@ namespace App\Livewire\Admin\Caregivers;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use App\Models\User;
+use App\Models\Caregiver;
 
 #[Layout('layouts.app')]
 class CaregiverList extends Component
@@ -13,8 +13,7 @@ class CaregiverList extends Component
 
     public function mount()
     {
-        $this->caregivers = User::where('role', 'caregiver')
-            ->withCount('patients')
+        $this->caregivers = Caregiver::withCount('patients')
             ->get();
     }
 

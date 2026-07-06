@@ -7,7 +7,7 @@
             </div>
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('patients') }}">Patients</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.patients') }}">Patients</a></li>
                 <li class="breadcrumb-item">Add Patient</li>
             </ul>
         </div>
@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                    <a href="{{ route('patients') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('admin.patients') }}" class="btn btn-outline-primary">
                         <i class="feather-arrow-left me-2"></i>
                         <span>Back to Patients</span>
                     </a>

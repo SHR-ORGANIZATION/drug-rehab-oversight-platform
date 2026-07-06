@@ -17,6 +17,10 @@ class Appointment extends Model
         'status',
     ];
 
+    protected $casts = [
+        'appointment_date' => 'datetime',
+    ];
+
     public function patient()
     {
         return $this->belongsTo(Patient::class);
@@ -24,7 +28,7 @@ class Appointment extends Model
 
     public function caregiver()
     {
-        return $this->belongsTo(User::class, 'caregiver_id');
+        return $this->belongsTo(Caregiver::class, 'caregiver_id');
     }
 
     public function doctor()

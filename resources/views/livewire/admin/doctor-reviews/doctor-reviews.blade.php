@@ -1,5 +1,5 @@
 <div>
-    <!-- [ page-header ] start -->
+    <!-- Page Header -->
     <div class="page-header">
         <div class="page-header-left d-flex align-items-center">
             <div class="page-header-title">
@@ -18,174 +18,258 @@
                         <span>Back</span>
                     </a>
                 </div>
-                <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                    <a href="javascript:void(0);" class="btn btn-icon btn-light-brand" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                        <i class="feather-bar-chart"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="d-md-none d-flex align-items-center">
-                <a href="javascript:void(0)" class="page-header-right-open-toggle">
-                    <i class="feather-align-right fs-20"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <!-- [ page-header ] end -->
-
-    <div class="bg-white py-3 border-bottom rounded-0 p-md-0 mb-0">
-        <div class="d-md-none d-flex">
-            <a href="javascript:void(0)" class="page-content-left-open-toggle">
-                <i class="feather-align-left fs-20"></i>
-            </a>
-        </div>
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="nav-tabs-wrapper page-content-left-sidebar-wrapper">
-                <div class="d-flex d-md-none">
-                    <a href="javascript:void(0)" class="page-content-left-close-toggle">
-                        <i class="feather-arrow-left me-2"></i>
-                        <span>Back</span>
-                    </a>
-                </div>
-                <ul class="nav nav-tabs nav-tabs-custom-style" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profileTab">All Reviews</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" href="{{ route('appointments') }}">Appointments</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" href="{{ route('patients') }}">Patients</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" href="{{ route('caregivers') }}">Care Givers</a>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="main-content">
-        <div class="tab-content">
-            <!-- All Reviews Tab -->
-            <div class="tab-pane fade show active" id="profileTab" role="tabpanel">
-                <div class="row">
-                    @forelse($reports as $report)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-image avatar-md">
-                                        <img src="{{ asset('assets/images/avatar/1.png') }}" alt="" class="img-fluid">
-                                    </div>
-                                    <div class="ms-3">
-                                        <h5 class="mb-1"><a href="{{ route('patients.view', $report->patient->id ?? 0) }}">{{ $report->patient->full_name ?? 'N/A' }}</a></h5>
-                                        <p class="text-muted mb-0">Patient</p>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Caregiver</label>
-                                    <p><a href="{{ route('caregivers') }}">{{ $report->caregiver->name ?? 'N/A' }}</a></p>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Report Date</label>
-                                    <p>{{ $report->report_date }}</p>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Symptoms</label>
-                                    <p class="text-truncate-2-line">{{ $report->symptoms }}</p>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Observations</label>
-                                    <p class="text-truncate-2-line">{{ $report->observations }}</p>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge bg-soft-warning text-warning">Pending Review</span>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewReportModal-{{ $report->id }}">
-                                        <i class="feather feather-eye me-1"></i>View
-                                    </a>
-                                </div>
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card stretch stretch-full">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="text-muted fs-12 mb-1">Total Reports</h6>
+                            <h4 class="fw-bold mb-0">{{ $stats['total'] }}</h4>
+                        </div>
+                        <div class="avatar-md">
+                            <div class="avatar-title bg-soft-primary text-primary rounded-circle fs-20">
+                                <i class="feather-file-text"></i>
                             </div>
                         </div>
                     </div>
-                    @empty
-                    <div class="col-12">
-                        <div class="text-center py-5">
-                            <h4 class="fs-16 fw-semibold">No pending reports for review</h4>
-                            <p class="fs-12 text-muted">There are no caregiver reports waiting for doctor review.</p>
-                        </div>
-                    </div>
-                    @endforelse
                 </div>
             </div>
-
         </div>
-    </div>
-    <!-- [ Main Content ] end -->
-
-    <!-- View Report Modals -->
-    @foreach($reports as $report)
-    <div class="modal fade" id="viewReportModal-{{ $report->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Caregiver Report - {{ $report->patient->full_name ?? 'N/A' }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Patient</label>
-                            <p>{{ $report->patient->full_name ?? 'N/A' }}</p>
+        <div class="col-xl-3 col-md-6">
+            <div class="card stretch stretch-full">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="text-muted fs-12 mb-1">Pending Review</h6>
+                            <h4 class="fw-bold mb-0 text-warning">{{ $stats['pending'] }}</h4>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Caregiver</label>
-                            <p>{{ $report->caregiver->name ?? 'N/A' }}</p>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <label class="form-label fw-bold">Symptoms</label>
-                            <p>{{ $report->symptoms }}</p>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <label class="form-label fw-bold">Observations</label>
-                            <p>{{ $report->observations }}</p>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <label class="form-label fw-bold">Doctor Notes</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter doctor notes"></textarea>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <label class="form-label fw-bold">Recommendation</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter recommendation"></textarea>
+                        <div class="avatar-md">
+                            <div class="avatar-title bg-soft-warning text-warning rounded-circle fs-20">
+                                <i class="feather-clock"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save Review</button>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card stretch stretch-full">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="text-muted fs-12 mb-1">Reviewed</h6>
+                            <h4 class="fw-bold mb-0 text-success">{{ $stats['reviewed'] }}</h4>
+                        </div>
+                        <div class="avatar-md">
+                            <div class="avatar-title bg-soft-success text-success rounded-circle fs-20">
+                                <i class="feather-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card stretch stretch-full">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="text-muted fs-12 mb-1">High/Critical Risk</h6>
+                            <h4 class="fw-bold mb-0 text-danger">{{ $stats['high_risk'] }}</h4>
+                        </div>
+                        <div class="avatar-md">
+                            <div class="avatar-title bg-soft-danger text-danger rounded-circle fs-20">
+                                <i class="feather-alert-triangle"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    @endforeach
+
+    <!-- Filters & Search -->
+    <div class="card stretch stretch-full mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="d-flex gap-2">
+                        <button wire:click="$set('filter', 'all')" class="btn btn-sm {{ $filter === 'all' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                            All ({{ $stats['total'] }})
+                        </button>
+                        <button wire:click="$set('filter', 'pending')" class="btn btn-sm {{ $filter === 'pending' ? 'btn-warning' : 'btn-outline-secondary' }}">
+                            Pending ({{ $stats['pending'] }})
+                        </button>
+                        <button wire:click="$set('filter', 'reviewed')" class="btn btn-sm {{ $filter === 'reviewed' ? 'btn-success' : 'btn-outline-secondary' }}">
+                            Reviewed ({{ $stats['reviewed'] }})
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="feather-search"></i></span>
+                        <input type="text" class="form-control" wire:model.debounce.300ms="search" placeholder="Search by patient name or ID...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-md-end">
+                        <select class="form-select w-auto" wire:model="perPage">
+                            <option value="10">10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports Table -->
+    <div class="card stretch stretch-full">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4" wire:click="sortBy('report_date')" style="cursor: pointer;">
+                                Report Date
+                                @if($sortField === 'report_date')
+                                    <i class="feather-arrow-{{ $sortDirection === 'asc' ? 'up' : 'down' }} ms-1"></i>
+                                @endif
+                            </th>
+                            <th wire:click="sortBy('patient_id')" style="cursor: pointer;">
+                                Patient
+                                @if($sortField === 'patient_id')
+                                    <i class="feather-arrow-{{ $sortDirection === 'asc' ? 'up' : 'down' }} ms-1"></i>
+                                @endif
+                            </th>
+                            <th>Caregiver</th>
+                            <th>Session Type</th>
+                            <th>Pain Level</th>
+                            <th>Functional Status</th>
+                            <th>Risk</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($reports as $report)
+                        <tr>
+                            <td class="ps-4">
+                                <span class="fw-bold">{{ $report->report_date->format('d M Y') }}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-image avatar-sm me-2">
+                                        <img src="{{ asset('assets/images/avatar/1.png') }}" alt="" class="img-fluid">
+                                    </div>
+                                    <div>
+                                        <p class="fw-bold mb-0 fs-13">{{ $report->patient->full_name ?? 'N/A' }}</p>
+                                        <small class="text-muted">{{ $report->patient->patient_id ?? '' }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ $report->caregiver->name ?? 'N/A' }}</td>
+                            <td>
+                                @if($report->session_type)
+                                    <span class="badge bg-soft-secondary text-secondary">{{ $report->session_type }}</span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($report->pain_level !== null)
+                                    @php
+                                        $painColor = $report->pain_level <= 3 ? 'success' : ($report->pain_level <= 6 ? 'warning' : 'danger');
+                                    @endphp
+                                    <span class="badge bg-soft-{{ $painColor }} text-{{ $painColor }}">
+                                        {{ $report->pain_level }}/10
+                                    </span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($report->functional_status)
+                                    @php
+                                        $statusColors = ['improved' => 'success', 'stable' => 'info', 'declined' => 'danger'];
+                                        $color = $statusColors[$report->functional_status] ?? 'secondary';
+                                    @endphp
+                                    <span class="badge bg-soft-{{ $color }} text-{{ $color }}">
+                                        {{ ucfirst($report->functional_status) }}
+                                    </span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($report->review && $report->review->risk_severity)
+                                    @php
+                                        $riskColors = ['low' => 'success', 'medium' => 'info', 'high' => 'warning', 'critical' => 'danger'];
+                                        $riskColor = $riskColors[$report->review->risk_severity] ?? 'secondary';
+                                    @endphp
+                                    <span class="badge bg-soft-{{ $riskColor }} text-{{ $riskColor }}">
+                                        {{ ucfirst($report->review->risk_severity) }}
+                                    </span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($report->status === 'pending')
+                                    <span class="badge bg-soft-warning text-warning">Pending</span>
+                                @else
+                                    <span class="badge bg-soft-success text-success">Reviewed</span>
+                                    @if($report->review && $report->review->review_status === 'draft')
+                                        <br><small class="text-muted">(Draft)</small>
+                                    @endif
+                                @endif
+                            </td>
+                            <td class="text-end pe-4">
+                                <a href="{{ route('admin.reports.review', $report->id) }}" class="btn btn-sm btn-{{ $report->status === 'pending' ? 'primary' : 'outline-primary' }}">
+                                    <i class="feather-{{ $report->status === 'pending' ? 'eye' : 'edit' }} me-1"></i>
+                                    {{ $report->status === 'pending' ? 'Review' : 'View' }}
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="9" class="text-center py-5">
+                                <div class="text-center">
+                                    <i class="feather-file-text fs-1 text-muted mb-3" style="font-size: 48px;"></i>
+                                    <h5 class="fs-16 fw-semibold">No reports found</h5>
+                                    <p class="fs-12 text-muted">
+                                        @if($search)
+                                            No reports match your search "{{ $search }}".
+                                        @else
+                                            There are no caregiver reports waiting for review.
+                                        @endif
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        @if($reports->hasPages())
+        <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    Showing {{ $reports->firstItem() }} to {{ $reports->lastItem() }} of {{ $reports->total() }} reports
+                </small>
+                {{ $reports->links() }}
+            </div>
+        </div>
+        @endif
+    </div>
 </div>
-
-@push('scripts')
-<script>
-$(document).ready(function() {
-    // Move modals to end of body to fix z-index issues
-    $('.modal').each(function() {
-        $(this).appendTo('body');
-    });
-});
-</script>
-@endpush

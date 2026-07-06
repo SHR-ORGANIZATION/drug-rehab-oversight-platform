@@ -37,7 +37,7 @@
                             </a>
                         </div>
                     </div>
-                    <a href="{{ route('caregivers.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.caregivers.create') }}" class="btn btn-primary">
                         <i class="feather-plus me-2"></i>
                         <span>Add Caregiver</span>
                     </a>

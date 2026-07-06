@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class Caregiver extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
     /**
@@ -24,7 +21,6 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'role',
     ];
 
     /**
@@ -50,8 +46,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function doctorReports()
+    public function patients()
     {
-        return $this->hasMany(CaregiverReport::class, 'doctor_id');
+        return $this->hasMany(Patient::class, 'caregiver_id');
+    }
+
+    public function caregiverReports()
+    {
+        return $this->hasMany(CaregiverReport::class, 'caregiver_id');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'caregiver_id');
     }
 }
