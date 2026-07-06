@@ -53,14 +53,14 @@ new #[Layout('layouts.guest')] class extends Component
         </div>
         <div class="auth-cover-sidebar-inner">
             <div class="auth-cover-card-wrapper">
-                <div class="auth-cover-card p-sm-5">
+                <div class="auth-cover-card p-sm-5" style="border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.08); border-radius: 20px;">
                     <!-- NexusCare Branding -->
                     <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 52px; height: 52px; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); animation: bounce 2s infinite;">
+                        <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 52px; height: 52px; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); animation: bounce 2s infinite; box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);">
                             <span class="text-white fw-bold fs-4">N</span>
                         </div>
                         <div>
-                            <h3 class="fw-bold mb-0" style="background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: fadeInUp 0.8s ease-out;">NexusCare</h3>
+                            <h3 class="fw-bold mb-0" style="background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: fadeInUp 0.8s ease-out; font-size: 1.5rem;">NexusCare</h3>
                             <small class="text-muted" style="animation: fadeInUp 1s ease-out;">Clinical & Care Coordination</small>
                         </div>
                     </div>
@@ -74,31 +74,38 @@ new #[Layout('layouts.guest')] class extends Component
                             from { opacity: 0; transform: translateY(10px); }
                             to { opacity: 1; transform: translateY(0); }
                         }
+                        .form-control:focus {
+                            border-color: #2563eb !important;
+                            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+                        }
+                        .input-group-text {
+                            border-color: #e5e7eb;
+                        }
                     </style>
                     
-                    <h2 class="fs-20 fw-bolder mb-2">Doctor Portal</h2>
-                    <p class="fs-12 fw-medium text-muted">Welcome back!.</p>
+                    <h2 class="fs-20 fw-bolder mb-2" style="color: #1e293b;">Doctor Portal</h2>
+                    <p class="fs-12 fw-medium text-muted">Welcome back!</p>
                     
                     @if($roleError)
-                    <div class="alert alert-danger mt-3 mb-0">
+                    <div class="alert alert-danger mt-3 mb-0" style="border-radius: 12px;">
                         <i class="feather-alert-circle me-2"></i>{{ $roleError }}
                     </div>
                     @endif
                     
                     <form wire:submit="login" class="w-100 mt-4 pt-2">
                         <div class="mb-4">
-                            <label class="form-label fs-12 fw-semibold text-muted">Email Address</label>
+                            <label class="form-label fs-12 fw-semibold text-muted mb-2">Email Address</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0"><i class="feather-mail text-muted"></i></span>
-                                <input type="email" wire:model="form.email" class="form-control border-start-0" placeholder="doctor@example.com" required autocomplete="username">
+                                <span class="input-group-text bg-light border-end-0" style="border-radius: 12px 0 0 12px;"><i class="feather-mail text-muted"></i></span>
+                                <input type="email" wire:model="form.email" class="form-control border-start-0" style="border-radius: 0 12px 12px 0; padding: 12px 16px;" placeholder="doctor@example.com" required autocomplete="username">
                             </div>
                             @error('form.email') <span class="text-danger small mt-1 d-block">{{ $message }}</span> @enderror
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fs-12 fw-semibold text-muted">Password</label>
+                            <label class="form-label fs-12 fw-semibold text-muted mb-2">Password</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0"><i class="feather-lock text-muted"></i></span>
-                                <input type="password" wire:model="form.password" class="form-control border-start-0" placeholder="Enter your password" required autocomplete="current-password">
+                                <span class="input-group-text bg-light border-end-0" style="border-radius: 12px 0 0 12px;"><i class="feather-lock text-muted"></i></span>
+                                <input type="password" wire:model="form.password" class="form-control border-start-0" style="border-radius: 0 12px 12px 0; padding: 12px 16px;" placeholder="Enter your password" required autocomplete="current-password">
                             </div>
                             @error('form.password') <span class="text-danger small mt-1 d-block">{{ $message }}</span> @enderror
                         </div>
@@ -112,7 +119,7 @@ new #[Layout('layouts.guest')] class extends Component
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-lg w-100 text-white fw-semibold" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none;">
+                            <button type="submit" class="btn btn-lg w-100 text-white fw-semibold" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none; border-radius: 12px; padding: 14px; box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35); transition: all 0.3s ease;">
                                 <i class="feather-log-in me-2"></i>Sign In to Doctor Portal
                             </button>
                         </div>
